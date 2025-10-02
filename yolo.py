@@ -9,6 +9,15 @@ class Yolo:
         # Webカメラの起動
         self.model = YOLO("yolo11n.pt") 
 
+    def get_value(self, results):
+        detect = []
+        for result in results:
+            for box in result.boxes:
+                temp = [result.names[int(box.cls)], float(box.conf)]
+                detect.append(temp)
+        
+        return detect
+    
     def main(self):
         ret, frame = self.cap.read()
         if not ret:
@@ -20,6 +29,9 @@ class Yolo:
         # 結果をフレームに描画して表示
         annotated_frame = results[0].plot()
 
+        # 各値の取得
+        detect_list = self.get_value(results)
+
         # 'q'を押すと終了
         if cv2.waitKey(1) & 0xFF == ord('q'):
             self.cap.release()
@@ -27,7 +39,8 @@ class Yolo:
             return 'q'
 
         # 描画結果を返す
-        return annotated_frame
+        return annotated_frame,detect_list
+
 
 if __name__ == "__main__":
     Yolo.main()

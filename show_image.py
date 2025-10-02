@@ -6,7 +6,7 @@ import struct
 def show_image():
     yolo = Yolo()
     while True:
-        frame = yolo.main()
+        frame,detect_list = yolo.main()
 
         # qを押すと終了
         if type(frame) is str:
@@ -19,6 +19,10 @@ def show_image():
 
         # 映像を垂れ流す
         cv2.imshow("daa", frame)
+
+        with open("log.txt", "a", encoding="utf-8") as f:
+            for list in detect_list:
+                print(detect_list, file=f)
 
 if __name__ == "__main__":
     show_image()
