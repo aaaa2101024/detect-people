@@ -1,4 +1,5 @@
 from ultralytics import YOLO
+from check_person import is_exist_person
 
 # Yolo関係の処理
 class Yolo:
@@ -25,8 +26,10 @@ class Yolo:
         # 各値の取得
         detect_list = self.get_value(results)
 
-        # 描画結果を返す
-        return annotated_frame,detect_list
+        # personがいるかどうかを探してもらう
+        exist_person = is_exist_person(detect_list)
+        # 描画結果と人間がいたかどうかを返す
+        return annotated_frame,exist_person
 
 
 if __name__ == "__main__":

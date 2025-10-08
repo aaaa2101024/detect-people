@@ -12,11 +12,7 @@ def show_image():
         if not ret:
             print("映像が取得できませんでした")
             break
-        annotated_frame,detect_list = yolo.main(frame)
-
-        # qを押すと終了
-        if type(annotated_frame) is str:
-            break
+        annotated_frame,exist_person = yolo.main(frame)
 
         # JPEGに圧縮
         encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 80]
@@ -26,9 +22,9 @@ def show_image():
         # 映像を垂れ流す
         cv2.imshow("daa", annotated_frame)
 
-        with open("log.txt", "a", encoding="utf-8") as f:
-            for list in detect_list:
-                print(detect_list, file=f)
+        if exist_person:
+            with open("log.txt", "a", encoding="utf-8") as f:
+                print("person is exist", file=f)
         
         # 'q'を押すと終了
         if cv2.waitKey(1) & 0xFF == ord('q'):
