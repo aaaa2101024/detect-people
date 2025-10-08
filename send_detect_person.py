@@ -4,6 +4,7 @@ import settings
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import asyncio
+import time
 
 # watchdogというファイルの更新だとかを監視してくれるライブラリを使う
 class FileChangeHandler(FileSystemEventHandler):
@@ -14,7 +15,7 @@ class FileChangeHandler(FileSystemEventHandler):
 
     def on_modified(self, event):
         if not event.is_directory and event.src_path.endswith(self.FILE):
-            print("更新されてます")
+            print("人間を検知!!!")
             # discordの送信送り
             asyncio.run_coroutine_threadsafe(self.bot.send_message(), self.loop)
 
@@ -28,8 +29,13 @@ class Bot(discord.Client):
 
     async def send_message(self):
         channel = self.get_channel(self.CHANNEL_ID)
+        with open(self.FILE, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+            output_log = lines[len(lines) - 1]
+        output_log = output_log.rstrip("\n")
+        print(output_log)
         if channel:
-            await channel.send(f"`{self.FILE}` が更新されました")
+            await channel.send(f"{output_log}")
 
     # 起動確認用
     async def on_ready(self):
