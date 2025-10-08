@@ -2,6 +2,7 @@ import socket
 from yolo import Yolo
 import cv2
 import struct
+import datetime
 
 cap = cv2.VideoCapture(0)
 
@@ -23,8 +24,10 @@ def show_image():
         cv2.imshow("daa", annotated_frame)
 
         if exist_person:
+            datetime_now = datetime.datetime.now()
+            str_now = datetime_now.strftime('%Y/%m/%d %H:%M:%S')
             with open("log.txt", "a", encoding="utf-8") as f:
-                print("person is exist", file=f)
+                print(f"{str_now} : person is exist", file=f)
         
         # 'q'を押すと終了
         if cv2.waitKey(1) & 0xFF == ord('q'):
