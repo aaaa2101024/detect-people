@@ -1,8 +1,12 @@
+# 映像を取得し, yoloを使って人間を検出する
+# 人間が検出されたらlog.txtに書き込み
 import socket
 from yolo import Yolo
 import cv2
 import struct
 import datetime
+import time
+from settings import STANDBYTIME
 
 cap = cv2.VideoCapture(0)
 
@@ -28,6 +32,8 @@ def show_image():
             str_now = datetime_now.strftime('%Y/%m/%d %H:%M:%S')
             with open("log.txt", "a", encoding="utf-8") as f:
                 print(f"{str_now} : person is exist", file=f)
+            # 連続更新防止用の待機時間
+            time.sleep(STANDBYTIME)
         
         # 'q'を押すと終了
         if cv2.waitKey(1) & 0xFF == ord('q'):
