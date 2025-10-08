@@ -3,26 +3,38 @@ from yolo import Yolo
 import cv2
 import struct
 
+cap = cv2.VideoCapture(0)
+
 def show_image():
     yolo = Yolo()
     while True:
-        frame,detect_list = yolo.main()
+        ret, frame = cap.read()
+        if not ret:
+            print("映像が取得できませんでした")
+            break
+        annotated_frame,detect_list = yolo.main(frame)
 
         # qを押すと終了
-        if type(frame) is str:
+        if type(annotated_frame) is str:
             break
 
         # JPEGに圧縮
         encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 80]
-        result, encimg = cv2.imencode('.jpg', frame, encode_param)
+        result, encimg = cv2.imencode('.jpg', annotated_frame, encode_param)
         data = encimg.tobytes()
 
         # 映像を垂れ流す
-        cv2.imshow("daa", frame)
+        cv2.imshow("daa", annotated_frame)
 
         with open("log.txt", "a", encoding="utf-8") as f:
             for list in detect_list:
                 print(detect_list, file=f)
+        
+        # 'q'を押すと終了
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            cap.release()
+            cv2.destroyAllWindows()
+            break
 
 if __name__ == "__main__":
     show_image()
