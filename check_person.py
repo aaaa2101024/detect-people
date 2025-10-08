@@ -1,5 +1,5 @@
 # どのぐらいの信頼度で人がいると検知するか
-REALPERSON = 0.80
+from settings import REALPERSON
 
 def is_exist_person(detect_list):
     for detect in detect_list:
