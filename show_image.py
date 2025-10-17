@@ -1,9 +1,7 @@
 # 映像を取得し, yoloを使って人間を検出する
 # 人間が検出されたらlog.txtに書き込み
-import socket
 from yolo import Yolo
 import cv2
-import struct
 import datetime
 import time
 from settings import STANDBYTIME
