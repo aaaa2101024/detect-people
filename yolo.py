@@ -1,11 +1,12 @@
 from ultralytics import YOLO
 from check_person import is_exist_person
 
+
 # Yolo関係の処理
 class Yolo:
     def __init__(self):
         # YOLOv11のモデルをロード
-        self.model = YOLO("yolo11n.pt") 
+        self.model = YOLO("yolo11n.pt")
 
     def get_value(self, results):
         detect = []
@@ -13,9 +14,9 @@ class Yolo:
             for box in result.boxes:
                 temp = [result.names[int(box.cls)], float(box.conf)]
                 detect.append(temp)
-        
+
         return detect
-    
+
     def main(self, frame):
         # YOLOで物体検出を行う
         results = self.model(frame)
@@ -29,7 +30,7 @@ class Yolo:
         # personがいるかどうかを探してもらう
         exist_person = is_exist_person(detect_list)
         # 描画結果と人間がいたかどうかを返す
-        return annotated_frame,exist_person
+        return annotated_frame, exist_person
 
 
 if __name__ == "__main__":
